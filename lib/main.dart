@@ -29,8 +29,6 @@ enum _MaterialListType {
   /// A list tile that contains two lines of text.
   twoLine,
 
-  /// A list tile that contains three lines of text.
-  threeLine,
 }
 
 class ListDemo extends StatefulWidget {
@@ -48,7 +46,7 @@ class _ListDemoState extends State<ListDemo> {
   PersistentBottomSheetController<Null> _bottomSheet;
   _MaterialListType _itemType = _MaterialListType.twoLine;
   bool _dense = false;
-  bool _showAvatars = true;
+  bool _showAvatars = false;
   bool _showIcons = false;
   bool _reverseSort = false;
   List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
@@ -81,6 +79,7 @@ class _ListDemoState extends State<ListDemo> {
                 )
               ),
             ),
+
             new MergeSemantics(
               child: new ListTile(
                 dense: true,
@@ -92,17 +91,7 @@ class _ListDemoState extends State<ListDemo> {
                 )
               ),
             ),
-            new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Three-line'),
-                trailing: new Radio<_MaterialListType>(
-                  value: _MaterialListType.threeLine,
-                  groupValue: _itemType,
-                  onChanged: changeItemType,
-                ),
-              ),
-            ),
+
             new MergeSemantics(
               child: new ListTile(
                 dense: true,
@@ -155,14 +144,10 @@ class _ListDemoState extends State<ListDemo> {
     Widget secondary;
     if (_itemType == _MaterialListType.twoLine) {
       secondary = const Text('Additional item information.');
-    } else if (_itemType == _MaterialListType.threeLine) {
-      secondary = const Text(
-        'Even more additional list item information appears on line three.',
-      );
     }
+
     return new MergeSemantics(
       child: new ListTile(
-        isThreeLine: _itemType == _MaterialListType.threeLine,
         dense: _dense,
         leading: _showAvatars ? new ExcludeSemantics(child: new CircleAvatar(child: new Text(item))) : null,
         title: new Text('This item represents $item.'),
@@ -183,9 +168,6 @@ class _ListDemoState extends State<ListDemo> {
         break;
       case _MaterialListType.twoLine:
         itemTypeText = 'Two-line';
-        break;
-      case _MaterialListType.threeLine:
-        itemTypeText = 'Three-line';
         break;
     }
 
