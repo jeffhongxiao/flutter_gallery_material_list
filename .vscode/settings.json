@@ -1,0 +1,5 @@
+{
+  "editor.renderWhitespace": "none",
+  // Controls whether the editor should render indent guides
+  "editor.renderIndentGuides": false,
+}
