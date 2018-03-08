@@ -23,9 +23,6 @@ enum _MaterialListType {
   /// A list tile that contains a single line of text.
   oneLine,
 
-  /// A list tile that contains a [CircleAvatar] followed by a single line of text.
-  oneLineWithAvatar,
-
   /// A list tile that contains two lines of text.
   twoLine,
 
@@ -45,7 +42,6 @@ class _ListDemoState extends State<ListDemo> {
 
   PersistentBottomSheetController<Null> _bottomSheet;
   _MaterialListType _itemType = _MaterialListType.twoLine;
-  bool _showAvatars = false;
   bool _showIcons = false;
   bool _reverseSort = false;
 
@@ -73,7 +69,7 @@ class _ListDemoState extends State<ListDemo> {
                 dense: true,
                 title: const Text('One-line'),
                 trailing: new Radio<_MaterialListType>(
-                  value: _showAvatars ? _MaterialListType.oneLineWithAvatar : _MaterialListType.oneLine,
+                  value: _MaterialListType.oneLine,
                   groupValue: _itemType,
                   onChanged: changeItemType,
                 )
@@ -89,22 +85,6 @@ class _ListDemoState extends State<ListDemo> {
                   groupValue: _itemType,
                   onChanged: changeItemType,
                 )
-              ),
-            ),
-
-            new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Show avatar'),
-                trailing: new Checkbox(
-                  value: _showAvatars,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _showAvatars = value;
-                    });
-                    _bottomSheet?.setState(() { });
-                  },
-                ),
               ),
             ),
             new MergeSemantics(
@@ -148,7 +128,7 @@ class _ListDemoState extends State<ListDemo> {
 
     return new MergeSemantics(
       child: new ListTile(
-        leading: _showAvatars ? new ExcludeSemantics(child: new CircleAvatar(child: new Text(item))) : null,
+        leading: null,
         title: new Text('This item represents $item.'),
         subtitle: secondary,
         trailing: _showIcons ? new Icon(Icons.info, color: Theme.of(context).disabledColor) : null,
@@ -161,7 +141,6 @@ class _ListDemoState extends State<ListDemo> {
     String itemTypeText;
     switch (_itemType) {
       case _MaterialListType.oneLine:
-      case _MaterialListType.oneLineWithAvatar:
         itemTypeText = 'Single-line';
         break;
       case _MaterialListType.twoLine:
