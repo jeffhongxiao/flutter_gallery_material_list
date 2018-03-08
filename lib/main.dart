@@ -40,12 +40,13 @@ class ListDemo extends StatefulWidget {
 class _ListDemoState extends State<ListDemo> {
   static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  PersistentBottomSheetController<Null> _bottomSheet;
   _MaterialListType _itemType = _MaterialListType.twoLine;
   bool _showIcons = false;
   bool _reverseSort = false;
 
   List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
+
+  PersistentBottomSheetController<Null> _bottomSheet;
 
   void changeItemType(_MaterialListType type) {
     setState(() {
@@ -56,15 +57,7 @@ class _ListDemoState extends State<ListDemo> {
 
   void _showConfigurationSheet() {
     final PersistentBottomSheetController<Null> bottomSheet = scaffoldKey.currentState.showBottomSheet((BuildContext bottomSheetContext) {
-      return new Container(
-        decoration: const BoxDecoration(
-          border: const Border(top: const BorderSide(color: Colors.black26)),
-        ),
-        child: new ListView(
-          shrinkWrap: true,
-          primary: false,
-          children: <Widget>[
-            new MergeSemantics(
+      final mergeSemanticsOneLine = new MergeSemantics(
               child: new ListTile(
                 dense: true,
                 title: const Text('One-line'),
@@ -74,9 +67,8 @@ class _ListDemoState extends State<ListDemo> {
                   onChanged: changeItemType,
                 )
               ),
-            ),
-
-            new MergeSemantics(
+            );
+      final mergeSemanticsTwoLine = new MergeSemantics(
               child: new ListTile(
                 dense: true,
                 title: const Text('Two-line'),
@@ -86,8 +78,8 @@ class _ListDemoState extends State<ListDemo> {
                   onChanged: changeItemType,
                 )
               ),
-            ),
-            new MergeSemantics(
+            );
+      final mergeSemanticsShowIcon = new MergeSemantics(
               child: new ListTile(
                 dense: true,
                 title: const Text('Show icon'),
@@ -101,7 +93,19 @@ class _ListDemoState extends State<ListDemo> {
                   },
                 ),
               ),
-            ),
+            );
+
+      return new Container(
+        decoration: const BoxDecoration(
+          border: const Border(top: const BorderSide(color: Colors.black26)),
+        ),
+        child: new ListView(
+          shrinkWrap: true,
+          primary: false,
+          children: <Widget>[
+            mergeSemanticsOneLine,
+            mergeSemanticsTwoLine,
+            mergeSemanticsShowIcon,
           ],
         ),
       );
