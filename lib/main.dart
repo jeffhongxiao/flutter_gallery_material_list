@@ -46,15 +46,12 @@ class _ListDemoState extends State<ListDemo> {
   static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   PersistentBottomSheetController<Null> _bottomSheet;
-  _MaterialListType _itemType = _MaterialListType.threeLine;
+  _MaterialListType _itemType = _MaterialListType.twoLine;
   bool _dense = false;
   bool _showAvatars = true;
   bool _showIcons = false;
-  bool _showDividers = false;
   bool _reverseSort = false;
-  List<String> items = <String>[
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-  ];
+  List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
 
   void changeItemType(_MaterialListType type) {
     setState(() {
@@ -136,36 +133,6 @@ class _ListDemoState extends State<ListDemo> {
                 ),
               ),
             ),
-            new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Show dividers'),
-                trailing: new Checkbox(
-                  value: _showDividers,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _showDividers = value;
-                    });
-                    _bottomSheet?.setState(() { });
-                  },
-                ),
-              ),
-            ),
-            new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Dense layout'),
-                trailing: new Checkbox(
-                  value: _dense,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _dense = value;
-                    });
-                    _bottomSheet?.setState(() { });
-                  },
-                ),
-              ),
-            ),
           ],
         ),
       );
@@ -223,8 +190,6 @@ class _ListDemoState extends State<ListDemo> {
     }
 
     Iterable<Widget> listTiles = items.map((String item) => buildListTile(context, item));
-    if (_showDividers)
-      listTiles = ListTile.divideTiles(context: context, tiles: listTiles);
 
     return new Scaffold(
       key: scaffoldKey,
