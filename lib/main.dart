@@ -34,7 +34,7 @@ enum _MaterialListType {
 class ListDemo extends StatefulWidget {
   const ListDemo({ Key key }) : super(key: key);
 
-  static const String routeName = '/material/list';
+  // static const String routeName = '/material/list';
 
   @override
   _ListDemoState createState() => new _ListDemoState();
@@ -45,10 +45,10 @@ class _ListDemoState extends State<ListDemo> {
 
   PersistentBottomSheetController<Null> _bottomSheet;
   _MaterialListType _itemType = _MaterialListType.twoLine;
-  bool _dense = false;
   bool _showAvatars = false;
   bool _showIcons = false;
   bool _reverseSort = false;
+
   List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
 
   void changeItemType(_MaterialListType type) {
@@ -148,7 +148,6 @@ class _ListDemoState extends State<ListDemo> {
 
     return new MergeSemantics(
       child: new ListTile(
-        dense: _dense,
         leading: _showAvatars ? new ExcludeSemantics(child: new CircleAvatar(child: new Text(item))) : null,
         title: new Text('This item represents $item.'),
         subtitle: secondary,
@@ -159,7 +158,6 @@ class _ListDemoState extends State<ListDemo> {
 
   @override
   Widget build(BuildContext context) {
-    final String layoutText = _dense ? ' \u2013 Dense' : '';
     String itemTypeText;
     switch (_itemType) {
       case _MaterialListType.oneLine:
@@ -176,7 +174,7 @@ class _ListDemoState extends State<ListDemo> {
     return new Scaffold(
       key: scaffoldKey,
       appBar: new AppBar(
-        title: new Text('Scrolling list\n$itemTypeText$layoutText'),
+        title: new Text('Scrolling list\n$itemTypeText'),
         actions: <Widget>[
           new IconButton(
             icon: const Icon(Icons.sort_by_alpha),
@@ -197,7 +195,7 @@ class _ListDemoState extends State<ListDemo> {
       ),
       body: new Scrollbar(
         child: new ListView(
-          padding: new EdgeInsets.symmetric(vertical: _dense ? 4.0 : 8.0),
+          padding: new EdgeInsets.symmetric(vertical: 8.0),
           children: listTiles.toList(),
         ),
       ),
