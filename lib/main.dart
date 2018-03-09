@@ -18,82 +18,91 @@ class MyApp extends StatelessWidget {
   }
 }
 
-
 enum _MaterialListType {
   /// A list tile that contains a single line of text.
   oneLine,
 
   /// A list tile that contains two lines of text.
   twoLine,
-
 }
 
 class ListDemo extends StatefulWidget {
-  const ListDemo({ Key key }) : super(key: key);
-
-  // static const String routeName = '/material/list';
+  const ListDemo({Key key}) : super(key: key);
 
   @override
   _ListDemoState createState() => new _ListDemoState();
 }
 
 class _ListDemoState extends State<ListDemo> {
-  static final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
-
+  List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
   _MaterialListType _itemType = _MaterialListType.twoLine;
   bool _showIcons = false;
   bool _reverseSort = false;
 
-  List<String> items = <String>['A', 'B', 'C', 'D', 'E'];
-
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+      new GlobalKey<ScaffoldState>();
   PersistentBottomSheetController<Null> _bottomSheet;
 
   void changeItemType(_MaterialListType type) {
     setState(() {
       _itemType = type;
     });
-    _bottomSheet?.setState(() { });
+    _bottomSheet?.setState(() {});
+  }
+
+  MergeSemantics _mergeSemanticsOfOneline(_MaterialListType listType) {
+    const Text t = const Text('one line');
+    return new MergeSemantics(
+      child: new ListTile(
+          dense: true,
+          title: t,
+          trailing: new Radio<_MaterialListType>(
+            value: listType,
+            groupValue: _itemType,
+            onChanged: changeItemType,
+          )),
+    );
+  }
+
+  MergeSemantics _mergeSemanticsOfTwoline(_MaterialListType listType) {
+    const Text t = const Text('Two-line');
+    return new MergeSemantics(
+      child: new ListTile(
+          dense: true,
+          title: t,
+          trailing: new Radio<_MaterialListType>(
+            value: listType,
+            groupValue: _itemType,
+            onChanged: changeItemType,
+          )),
+    );
+  }
+
+  MergeSemantics _mergeSemanticsOfShowIcon() {
+    const Text t = const Text('Show icon');
+    return new MergeSemantics(
+      child: new ListTile(
+        dense: true,
+        title: t,
+        trailing: new Checkbox(
+          value: _showIcons,
+          onChanged: (bool value) {
+            setState(() {
+              _showIcons = value;
+            });
+            _bottomSheet?.setState(() {});
+          },
+        ),
+      ),
+    );
   }
 
   void _showConfigurationSheet() {
-    final PersistentBottomSheetController<Null> bottomSheet = scaffoldKey.currentState.showBottomSheet((BuildContext bottomSheetContext) {
-      final mergeSemanticsOneLine = new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('One-line'),
-                trailing: new Radio<_MaterialListType>(
-                  value: _MaterialListType.oneLine,
-                  groupValue: _itemType,
-                  onChanged: changeItemType,
-                )
-              ),
-            );
-      final mergeSemanticsTwoLine = new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Two-line'),
-                trailing: new Radio<_MaterialListType>(
-                  value: _MaterialListType.twoLine,
-                  groupValue: _itemType,
-                  onChanged: changeItemType,
-                )
-              ),
-            );
-      final mergeSemanticsShowIcon = new MergeSemantics(
-              child: new ListTile(
-                dense: true,
-                title: const Text('Show icon'),
-                trailing: new Checkbox(
-                  value: _showIcons,
-                  onChanged: (bool value) {
-                    setState(() {
-                      _showIcons = value;
-                    });
-                    _bottomSheet?.setState(() { });
-                  },
-                ),
-              ),
-            );
+    final PersistentBottomSheetController<Null> bottomSheet = scaffoldKey
+        .currentState.showBottomSheet((BuildContext bottomSheetContext) {
+      final msOneline = _mergeSemanticsOfOneline(_MaterialListType.oneLine);
+      final msTwoline = _mergeSemanticsOfTwoline(_MaterialListType.twoLine);
+      final msShowIcon = _mergeSemanticsOfShowIcon();
 
       return new Container(
         decoration: const BoxDecoration(
@@ -103,9 +112,9 @@ class _ListDemoState extends State<ListDemo> {
           shrinkWrap: true,
           primary: false,
           children: <Widget>[
-            mergeSemanticsOneLine,
-            mergeSemanticsTwoLine,
-            mergeSemanticsShowIcon,
+            msOneline,
+            msTwoline,
+            msShowIcon,
           ],
         ),
       );
@@ -135,24 +144,30 @@ class _ListDemoState extends State<ListDemo> {
         leading: null,
         title: new Text('This item represents $item.'),
         subtitle: secondary,
-        trailing: _showIcons ? new Icon(Icons.info, color: Theme.of(context).disabledColor) : null,
+        trailing: _showIcons
+            ? new Icon(Icons.info, color: Theme.of(context).disabledColor)
+            : null,
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    String itemTypeText;
+  String _decideItemTypeText() {
     switch (_itemType) {
       case _MaterialListType.oneLine:
-        itemTypeText = 'Single-line';
-        break;
+        return 'Single-line';
       case _MaterialListType.twoLine:
-        itemTypeText = 'Two-line';
-        break;
+        return 'Two-line';
+      default:
+        return '';
     }
+  }
 
-    Iterable<Widget> listTiles = items.map((String item) => buildListTile(context, item));
+  @override
+  Widget build(BuildContext context) {
+    String itemTypeText = _decideItemTypeText();
+
+    Iterable<Widget> listTiles =
+        items.map((String item) => buildListTile(context, item));
 
     return new Scaffold(
       key: scaffoldKey,
@@ -165,7 +180,8 @@ class _ListDemoState extends State<ListDemo> {
             onPressed: () {
               setState(() {
                 _reverseSort = !_reverseSort;
-                items.sort((String a, String b) => _reverseSort ? b.compareTo(a) : a.compareTo(b));
+                items.sort((String a, String b) =>
+                    _reverseSort ? b.compareTo(a) : a.compareTo(b));
               });
             },
           ),
