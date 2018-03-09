@@ -50,6 +50,21 @@ class _ListDemoState extends State<ListDemo> {
     _bottomSheet?.setState(() {});
   }
 
+  MergeSemantics _mergeSemanticsOf(String text, _MaterialListType listType) {
+    const Text t = const Text(text);
+    return new MergeSemantics(
+      child: new ListTile(
+          dense: true,
+          title: t,
+          trailing: new Radio<_MaterialListType>(
+            value: listType,
+            groupValue: _itemType,
+            onChanged: changeItemType,
+          )),
+    );
+  }
+
+  @deprecated
   MergeSemantics _mergeSemanticsOfOneline(_MaterialListType listType) {
     const Text t = const Text('one line');
     return new MergeSemantics(
@@ -64,6 +79,7 @@ class _ListDemoState extends State<ListDemo> {
     );
   }
 
+  @deprecated
   MergeSemantics _mergeSemanticsOfTwoline(_MaterialListType listType) {
     const Text t = const Text('Two-line');
     return new MergeSemantics(
@@ -100,8 +116,8 @@ class _ListDemoState extends State<ListDemo> {
   void _showConfigurationSheet() {
     final PersistentBottomSheetController<Null> bottomSheet = scaffoldKey
         .currentState.showBottomSheet((BuildContext bottomSheetContext) {
-      final msOneline = _mergeSemanticsOfOneline(_MaterialListType.oneLine);
-      final msTwoline = _mergeSemanticsOfTwoline(_MaterialListType.twoLine);
+      final msOneline = _mergeSemanticsOf('ONE LINE', _MaterialListType.oneLine);
+      final msTwoline = _mergeSemanticsOf('TWO LINE', _MaterialListType.twoLine);
       final msShowIcon = _mergeSemanticsOfShowIcon();
 
       return new Container(
