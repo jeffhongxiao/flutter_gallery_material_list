@@ -51,36 +51,7 @@ class _ListDemoState extends State<ListDemo> {
   }
 
   MergeSemantics _mergeSemanticsOf(String text, _MaterialListType listType) {
-    //const Text t = const Text(text);
-    const Text t = const Text('we want a variable here');
-    return new MergeSemantics(
-      child: new ListTile(
-          dense: true,
-          title: t,
-          trailing: new Radio<_MaterialListType>(
-            value: listType,
-            groupValue: _itemType,
-            onChanged: changeItemType,
-          )),
-    );
-  }
-
-  MergeSemantics _mergeSemanticsOfOneline(_MaterialListType listType) {
-    const Text t = const Text('one line');
-    return new MergeSemantics(
-      child: new ListTile(
-          dense: true,
-          title: t,
-          trailing: new Radio<_MaterialListType>(
-            value: listType,
-            groupValue: _itemType,
-            onChanged: changeItemType,
-          )),
-    );
-  }
-
-  MergeSemantics _mergeSemanticsOfTwoline(_MaterialListType listType) {
-    const Text t = const Text('Two-line');
+    Text t = new Text(text);
     return new MergeSemantics(
       child: new ListTile(
           dense: true,
@@ -115,8 +86,8 @@ class _ListDemoState extends State<ListDemo> {
   void _showConfigurationSheet() {
     final PersistentBottomSheetController<Null> bottomSheet = scaffoldKey
         .currentState.showBottomSheet((BuildContext bottomSheetContext) {
-      final msOneline = _mergeSemanticsOfOneline(_MaterialListType.oneLine);
-      final msTwoline = _mergeSemanticsOfTwoline(_MaterialListType.twoLine);
+      final msOneline = _mergeSemanticsOf('1 line', _MaterialListType.oneLine);
+      final msTwoline = _mergeSemanticsOf('2 line', _MaterialListType.twoLine);
       final msShowIcon = _mergeSemanticsOfShowIcon();
 
       return new Container(
